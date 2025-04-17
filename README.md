@@ -58,8 +58,6 @@ We now use a true 3D bin-packing algorithm powered by py3dbp:
 1. Clone the repository:
    ```bash
    git clone https://github.com/OleksandrShchur/TruckLoader.git
-
-   ```bash
    cd truckloader
 
 2. Install dependencies:
