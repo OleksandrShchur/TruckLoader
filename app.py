@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import random
 import plotly.graph_objects as go
+from py3dbp import Packer, Bin, Item
 
 
 st.set_page_config(page_title="Truck Loader", layout="centered")
@@ -19,7 +20,7 @@ truck_height = st.number_input("Висота", min_value=1, value=120)
 st.subheader("Вантажі (одиниці)")
 box_data = st.text_area(
     "Введіть список вантажів у форматі: довжина,ширина,висота,шт",
-    "40,30,30,5\n60,50,40,2"
+    "120,100,80,1\n110,90,70,1\n100,100,100,1\n90,90,60,1\n80,80,80,1\n70,70,70,1"
 )
 
 def draw_truck_3d(truck, placed_boxes):
@@ -47,60 +48,33 @@ def draw_truck_3d(truck, placed_boxes):
 
     st.pyplot(fig)
 
-def pack_boxes(truck, boxes):
-    placed = []
-    x, y, z = 0, 0, 0  # поточні координати розміщення
-    layer_height = 0
+def optimize_with_py3dbp(truck, boxes):
+    packer = Packer()
+    
+    # додаємо трак як "контейнер"
+    packer.add_bin(Bin("Truck", truck['length'], truck['width'], truck['height'], 10000))
 
-    # створюємо список усіх коробок
-    all_boxes = []
+    # додаємо коробки
     for box in boxes:
-        for _ in range(box['count']):
-            all_boxes.append({
-                'length': box['length'],
-                'width': box['width'],
-                'height': box['height'],
+        for i in range(box['count']):
+            packer.add_item(Item(f"{box['length']}x{box['width']}x{box['height']}_{i}", 
+                                 box['length'], box['width'], box['height'], 1))
+
+    packer.pack()
+
+    placed_boxes = []
+    for b in packer.bins:
+        for item in b.items:
+            placed_boxes.append({
+                'x': item.position[0],
+                'y': item.position[1],
+                'z': item.position[2],
+                'length': item.width,
+                'width': item.height,
+                'height': item.depth
             })
 
-    # сортуємо коробки від найбільших
-    all_boxes.sort(key=lambda b: (b['height'] * b['length'] * b['width']), reverse=True)
-
-    for b in all_boxes:
-        if x + b['length'] <= truck['length'] and y + b['width'] <= truck['width'] and z + b['height'] <= truck['height']:
-            placed.append({
-                'x': x,
-                'y': y,
-                'z': z,
-                'length': b['length'],
-                'width': b['width'],
-                'height': b['height']
-            })
-            x += b['length']
-            layer_height = max(layer_height, b['height'])
-        else:
-            # новий ряд
-            x = 0
-            y += b['width']
-            if y + b['width'] > truck['width']:
-                # новий шар по висоті
-                y = 0
-                z += layer_height
-                layer_height = 0
-            if x + b['length'] <= truck['length'] and y + b['width'] <= truck['width'] and z + b['height'] <= truck['height']:
-                placed.append({
-                    'x': x,
-                    'y': y,
-                    'z': z,
-                    'length': b['length'],
-                    'width': b['width'],
-                    'height': b['height']
-                })
-                x += b['length']
-                layer_height = max(layer_height, b['height'])
-            else:
-                # не поміщається
-                continue
-    return placed
+    return placed_boxes
 
 def draw_truck_3d_interactive(truck, placed_boxes):
     fig = go.Figure()
@@ -177,7 +151,7 @@ if st.button("📦 Оптимізувати завантаження"):
         st.write(f" - {b['length']} x {b['width']} x {b['height']} ({b['count']} шт.)")
 
     # ⬇️ Цей блок ПІСЛЯ циклу
-    placed_boxes = pack_boxes({
+    placed_boxes = optimize_with_py3dbp({
         'length': truck_length,
         'width': truck_width,
         'height': truck_height

@@ -55,7 +55,6 @@ A simple greedy algorithm:
     ```bash
     python -m streamlit run app.py
 
-
 Developed with ❤️ in Ukraine
 
 
