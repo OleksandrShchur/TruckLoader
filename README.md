@@ -24,19 +24,32 @@ Enter the list of boxes in the following format:
 length,width,height,count
 
 ### ✅ Example:
-40,30,30,5 60,50,40,2
+40,30,30,5 
+60,50,40,2
 
 
 ---
 
 ## 🧠 Packing Algorithm
 
-A simple greedy algorithm:
-- Sorts boxes by volume (largest first)
-- Places boxes in layers and rows within the truck bounds
-- Uses fixed orientation (no box rotation yet)
+We now use a true 3D bin-packing algorithm powered by py3dbp:
+- Automatically finds optimal positions and orientations for boxes
+- Handles box rotation in 3D space
+- Maximizes usage of truck volume
+- Can handle complex combinations of different box sizes
 
-> ⚠️ Note: This is a basic version. Future updates may include rotation and more advanced optimization.
+✅ Benefits over simple greedy:
+- Significantly better packing efficiency
+- Smart orientation and layer stacking
+- Handles real-world logistics scenarios
+
+⚙️ How it works:
+- All input boxes are added to a Packer instance
+- The algorithm places them into the truck (Bin) using heuristics
+- Returns only the successfully packed boxes with coordinates and orientation
+
+📦 You can still input your box data manually in the format:
+- length,width,height,count — one box per line.
 
 ---
 
@@ -45,6 +58,8 @@ A simple greedy algorithm:
 1. Clone the repository:
    ```bash
    git clone https://github.com/OleksandrShchur/TruckLoader.git
+
+   ```bash
    cd truckloader
 
 2. Install dependencies:
