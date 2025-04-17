@@ -1,0 +1,4 @@
+streamlit
+matplotlib
+plotly
+Axes3D
