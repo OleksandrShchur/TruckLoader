@@ -24,8 +24,8 @@ Enter the list of boxes in the following format:
 length,width,height,count
 
 ### ✅ Example:
-40,30,30,5 
-60,50,40,2
+    40,30,30,5 
+    60,50,40,2
 
 
 ---
