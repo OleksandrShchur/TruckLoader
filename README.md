@@ -48,10 +48,12 @@ A simple greedy algorithm:
    cd truckloader
 
 2. Install dependencies:
-    ```pip install -r requirements.txt
+    ```bash
+    pip install -r requirements.txt
 
 3. Launch the app:
-    ```python -m streamlit run app.py
+    ```bash
+    python -m streamlit run app.py
 
 
 
