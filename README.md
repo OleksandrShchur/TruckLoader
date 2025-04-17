@@ -56,7 +56,6 @@ A simple greedy algorithm:
     python -m streamlit run app.py
 
 
-
 Developed with ❤️ in Ukraine
 
 
