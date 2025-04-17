@@ -44,7 +44,7 @@ A simple greedy algorithm:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/truckloader.git
+   git clone https://github.com/OleksandrShchur/TruckLoader.git
    cd truckloader
 
 2. Install dependencies:
@@ -58,5 +58,5 @@ A simple greedy algorithm:
 Developed with ❤️ in Ukraine
 
 
-📄 License
-MIT License — free to use, modify, and distribute.
+📄 License: 
+[MIT License](https://opensource.org/license/mit) — free to use, modify, and distribute.
